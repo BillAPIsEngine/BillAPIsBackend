@@ -1,6 +1,8 @@
 # BillAPIsBackend
 
-![Alt text] (https://github.com/BillAPIsEngine/BillAPIsBackend/blob/main/highlevel_solution.png)
+<p align="center">
+  <img src="https://github.com/BillAPIsEngine/BillAPIsBackend/blob/main/highlevel_solution.png" width="950">
+</p>
 
 Billing Module:
 
