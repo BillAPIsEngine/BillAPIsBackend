@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .section-header {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <nav class="nav flex-column">
+                <h3>Admin Portal</h3>
+                <a class="nav-link active" href="#dashboard">Dashboard</a>
+                <a class="nav-link" href="#userManagement">User Management</a>
+                <a class="nav-link" href="#apiManagement">API Management</a>
+                <a class="nav-link" href="#billing">Billing</a>
+                <a class="nav-link" href="#settings">Settings</a>
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <!-- Dashboard Section -->
+            <section id="dashboard">
+                <div class="section-header">Dashboard</div>
+                <p><strong>Welcome Admin</strong></p>
+            </section>
+
+            <!-- API Management Section -->
+            <section id="apiManagement">
+                <div class="section-header">API Management</div>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="api_manager" class="form-label">Select API Manager</label>
+                        <select class="form-select" id="api_manager" name="api_manager">
+                            <option value="" disabled selected>Select API Manager</option>
+                            {% for manager in managers %}
+                                <option value="{{ manager }}">{{ manager }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="billing_logic" class="form-label">Select Billing Logic</label>
+                        <select class="form-select" id="billing_logic" name="billing_logic">
+                            <option value="" disabled selected>Select Billing Logic</option>
+                            {% for key, logic in billing_logics.items() %}
+                                <option value="{{ key }}">{{ logic.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="billing_price" class="form-label">Billing Price</label>
+                        <input type="number" class="form-control" id="billing_price" name="billing_price" placeholder="Enter price">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="currency" class="form-label">Currency</label>
+                        <input type="text" class="form-control" id="currency" name="currency" placeholder="Enter currency">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="selected_apis" class="form-label">Select APIs to Assign Billing</label>
+                        <select multiple class="form-select" id="selected_apis" name="selected_apis">
+                            <option value="API_1">API 1</option>
+                            <option value="API_2">API 2</option>
+                            <option value="API_3">API 3</option>
+                            <!-- Dynamically add your APIs -->
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </section>
+
+            <!-- Billing Section -->
+            <section id="billing">
+                <div class="section-header">Billing</div>
+                {% if api_details %}
+                    <h4>API Details</h4>
+                    <pre>{{ api_details | tojson }}</pre>
+                {% endif %}
+
+                {% if api_usage_data %}
+                    <h4>API Usage Data</h4>
+                    <pre>{{ api_usage_data | tojson }}</pre>
+                {% endif %}
+
+                {% if billing_amount %}
+                    <h4>Calculated Billing</h4>
+                    <p>Total Billing Amount: ${{ billing_amount }}</p>
+                {% endif %}
+
+                {% if erp_response %}
+                    <h4>ERP Response</h4>
+                    <pre>{{ erp_response | tojson }}</pre>
+                {% endif %}
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings">
+                <div class="section-header">Settings</div>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload Invoice Template</label>
+                        <input type="file" class="form-control" id="file" name="file">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="custom_html_template" class="form-label">Custom Invoice HTML Template</label>
+                        <textarea class="form-control" id="custom_html_template" name="custom_html_template" rows="4">{{ invoice_template }}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

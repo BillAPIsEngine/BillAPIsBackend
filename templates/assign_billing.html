@@ -1,0 +1,40 @@
+<h3>Assign Billing Logic for {{ customer.name }}</h3>
+
+<div class="mb-3">
+    <label for="selected_apis" class="form-label">Subscribed APIs</label>
+    <select multiple class="form-select" id="selected_apis" name="selected_apis">
+        {% for api in apis %}
+            <option value="{{ api.id }}">{{ api.name }} - {{ api.description }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="billing_logic" class="form-label">Select Billing Logic</label>
+    <select class="form-select" id="billing_logic" name="billing_logic">
+        {% for logic in billing_logics %}
+            <option value="{{ logic.id }}">{{ logic.name }} - {{ logic.description }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<button class="btn btn-primary" onclick="applyBilling()">Apply Billing</button>
+
+<script>
+    function applyBilling() {
+        const selectedAPIs = [...document.getElementById("selected_apis").selectedOptions].map(option => option.value);
+        const billingLogic = document.getElementById("billing_logic").value;
+        const customerId = "{{ customer.id }}";
+
+        fetch(`/apply-billing/${customerId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ apis: selectedAPIs, billing_logic: billingLogic })
+        })
+        .then(response => response.json())
+        .then(data => alert(data.message))
+        .catch(error => console.error("Error:", error));
+    }
+</script>
